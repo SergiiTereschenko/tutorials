@@ -11,15 +11,21 @@ class LoginQueueUsingSemaphore {
     }
 
     boolean tryLogin() {
-        return semaphore.tryAcquire();
+        boolean b = semaphore.tryAcquire();
+        System.out.println("semaphore.tryAcquire() : " + b + " thr: " + Thread.currentThread().getName());
+        availableSlots();
+        return b;
     }
 
     void logout() {
+        System.out.println("semaphore.release() " + " thr: " + Thread.currentThread().getName());
         semaphore.release();
     }
 
     int availableSlots() {
-        return semaphore.availablePermits();
+        int i = semaphore.availablePermits();
+        System.out.println("AvailablePermits : " + i + " thr: " + Thread.currentThread().getName());
+        return i;
     }
 
 }

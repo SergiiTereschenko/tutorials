@@ -24,7 +24,12 @@ public class FunctionalInterfaceUnitTest {
     @Test
     public void whenPassingLambdaToComputeIfAbsent_thenTheValueGetsComputedAndPutIntoMap() {
         Map<String, Integer> nameMap = new HashMap<>();
-        Integer value = nameMap.computeIfAbsent("John", String::length);
+        Integer value = nameMap.computeIfAbsent("John", new Function<String, Integer>() {
+            @Override
+            public Integer apply(String s) {
+                return s.length();
+            }
+        });
 
         assertEquals(new Integer(4), nameMap.get("John"));
         assertEquals(new Integer(4), value);
@@ -48,6 +53,14 @@ public class FunctionalInterfaceUnitTest {
         byte[] expectedArray = { (byte) 2, (byte) 4, (byte) 6 };
         assertArrayEquals(expectedArray, transformedArray);
 
+    }
+
+    public byte[] transformArray(short[] array, ShortToByteFunction function) {
+        byte[] transformedArray = new byte[array.length];
+        for (int i = 0; i < array.length; i++) {
+            transformedArray[i] = function.applyAsByte(array[i]);
+        }
+        return transformedArray;
     }
 
     @Test
@@ -81,6 +94,8 @@ public class FunctionalInterfaceUnitTest {
             fibs[1] = fib3;
             return result;
         });
+
+//        fibs = new int[] {3, 5};
 
         List<Integer> fibonacci5 = fibonacci.limit(5)
             .collect(Collectors.toList());
@@ -176,12 +191,5 @@ public class FunctionalInterfaceUnitTest {
         return Math.pow(lazyValue.get(), 2);
     }
 
-    public byte[] transformArray(short[] array, ShortToByteFunction function) {
-        byte[] transformedArray = new byte[array.length];
-        for (int i = 0; i < array.length; i++) {
-            transformedArray[i] = function.applyAsByte(array[i]);
-        }
-        return transformedArray;
-    }
 
 }

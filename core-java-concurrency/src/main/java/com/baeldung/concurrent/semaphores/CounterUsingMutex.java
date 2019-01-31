@@ -13,10 +13,13 @@ class CounterUsingMutex {
     }
 
     void increase() throws InterruptedException {
+        System.out.println("PRE mutex.acquire(); thread: " + Thread.currentThread().getName());
         mutex.acquire();
+        System.out.println("mutex.acquire(); thread: " + Thread.currentThread().getName());
         this.count = this.count + 1;
         Thread.sleep(1000);
         mutex.release();
+        System.out.println("RELEASE mutex.acquire() AND sleep; thread: " + Thread.currentThread().getName());
 
     }
 

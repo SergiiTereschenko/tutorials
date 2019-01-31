@@ -13,10 +13,14 @@ public class CountingTask extends RecursiveTask<Integer> {
 
     @Override
     protected Integer compute() {
-        return node.getValue() + node.getChildren().stream()
-          .map(childNode -> new CountingTask(childNode).fork())
-          .mapToInt(ForkJoinTask::join)
-          .sum();
+        System.out.println("Node.val: " + node.getValue());
+        int sum = 0;
+        for (TreeNode childNode : node.getChildren()) {
+            ForkJoinTask<Integer> fork = new CountingTask(childNode).fork();
+            int join = fork.join();
+            sum += join;
+        }
+        return node.getValue() + sum;
     }
 
 }

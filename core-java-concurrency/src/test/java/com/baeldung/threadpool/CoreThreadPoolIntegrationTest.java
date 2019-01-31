@@ -136,7 +136,7 @@ public class CoreThreadPoolIntegrationTest {
     @Test
     public void whenUsingForkJoinPool_thenSumOfTreeElementsIsCalculatedCorrectly() {
 
-        TreeNode tree = new TreeNode(5, new TreeNode(3), new TreeNode(2, new TreeNode(2), new TreeNode(8)));
+        TreeNode tree = new TreeNode(5, new TreeNode(3), new TreeNode(2, new TreeNode(4), new TreeNode(8)));
 
         ForkJoinPool forkJoinPool = ForkJoinPool.commonPool();
         int sum = forkJoinPool.invoke(new CountingTask(tree));
