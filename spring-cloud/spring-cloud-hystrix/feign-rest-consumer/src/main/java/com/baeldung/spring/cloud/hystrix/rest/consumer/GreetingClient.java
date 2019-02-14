@@ -11,7 +11,7 @@ public interface GreetingClient extends GreetingController {
     public static class GreetingClientFallback implements GreetingClient {
         @Override
         public String greeting(@PathVariable("username") String username) {
-            return "Hello User!";
+            return "Fallback Hello User!";
         }
     }
 }

@@ -1,19 +1,20 @@
 package com.baeldung.java.concurrentmap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.junit.Test;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ConcurrentMapPerformanceManualTest {
 
@@ -22,16 +23,22 @@ public class ConcurrentMapPerformanceManualTest {
         final Map<String, Object> hashtable = new Hashtable<>();
         final Map<String, Object> synchronizedHashMap = Collections.synchronizedMap(new HashMap<>());
         final Map<String, Object> concurrentHashMap = new ConcurrentHashMap<>();
+        final Map<String, Object> skipLisMap = new ConcurrentSkipListMap<>();
 
         final long hashtableAvgRuntime = timeElapseForGetPut(hashtable);
         final long syncHashMapAvgRuntime = timeElapseForGetPut(synchronizedHashMap);
         final long concurrentHashMapAvgRuntime = timeElapseForGetPut(concurrentHashMap);
+        final long skipListAvgRuntime = timeElapseForGetPut(skipLisMap);
 
         System.out.println(String.format("Hashtable: %s, syncHashMap: %s, ConcurrentHashMap: %s", hashtableAvgRuntime, syncHashMapAvgRuntime, concurrentHashMapAvgRuntime));
 
+        System.out.println("hashtableAvgRuntime: " + hashtableAvgRuntime);
+        System.out.println("syncHashMapAvgRuntime: " + syncHashMapAvgRuntime);
+        System.out.println("concurrentHashMapAvgRuntime: " + concurrentHashMapAvgRuntime);
+        System.out.println("skipListAvgRuntime: " + skipListAvgRuntime);
+
         assertTrue(hashtableAvgRuntime > concurrentHashMapAvgRuntime);
         assertTrue(syncHashMapAvgRuntime > concurrentHashMapAvgRuntime);
-
     }
 
     private long timeElapseForGetPut(Map<String, Object> map) throws InterruptedException {

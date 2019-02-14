@@ -19,6 +19,7 @@ public class ConcurrentMapAggregateStatusManualTest {
     private ExecutorService executorService;
     private Map<String, Integer> concurrentMap;
     private List<Integer> mapSizes;
+    private List<Integer> getSizes;
     private int MAX_SIZE = 100000;
 
     @Before
@@ -26,6 +27,7 @@ public class ConcurrentMapAggregateStatusManualTest {
         executorService = Executors.newFixedThreadPool(2);
         concurrentMap = new ConcurrentHashMap<>();
         mapSizes = new ArrayList<>(MAX_SIZE);
+        getSizes = new ArrayList<>(MAX_SIZE);
     }
 
     @Test
@@ -38,7 +40,10 @@ public class ConcurrentMapAggregateStatusManualTest {
         };
         Runnable retrieveMapData = () -> {
             for (int i = 0; i < MAX_SIZE; i++) {
-                concurrentMap.get(String.valueOf(i));
+                Integer value = concurrentMap.get(String.valueOf(i));
+                if(value != null) {
+                    getSizes.add(value);
+                }
             }
         };
         executorService.execute(retrieveMapData);
@@ -50,6 +55,9 @@ public class ConcurrentMapAggregateStatusManualTest {
             assertEquals("map size should be consistently reliable", i, mapSizes.get(i - 1)
                 .intValue());
         }
+
+        System.out.println("GetSize: " + getSizes.size());
+
         assertEquals(MAX_SIZE, concurrentMap.size());
     }
 

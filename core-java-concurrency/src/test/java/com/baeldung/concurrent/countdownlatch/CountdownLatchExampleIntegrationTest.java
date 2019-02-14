@@ -25,6 +25,7 @@ public class CountdownLatchExampleIntegrationTest {
         // When
         workers.forEach(Thread::start);
         countDownLatch.await(); // Block until workers finish
+        System.out.println("Doing some logic121212");
         outputScraper.add("Latch released");
 
         // Then
